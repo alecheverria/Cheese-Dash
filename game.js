@@ -41,7 +41,7 @@ var mainState = {
         this.player.body.velocity.x = 0;
         
         game.physics.arcade.collide(this.player, this.floor);
-        game
+        //game
         
         if (cursors.left.isDown){
             //  Move to the left
@@ -54,20 +54,21 @@ var mainState = {
             this.player.body.velocity.x = 150;
 
         } 
-        if (cursors.up.isDown)
+        if (cursors.up.isDown){
             jump();
         
-        
+        }
         
         
         
 
    },
+        /* jump code in progress */
        jump: function() {
             if (this.consecutiveJumps > 0 && this.player.body.touching.down) {  
                 this.player.body.velocity.y = -350;
                 this.consecutiveJumps --;
-                if (this.consecutiveJumps = 1) {
+                if (this.consecutiveJumps === 1) {
                     this.player.body.velocity.y = -350;
                     this.consecutiveJumps = 0;
                 }
