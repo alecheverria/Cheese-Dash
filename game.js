@@ -14,10 +14,10 @@ var mainState = {
     //loads all the assets
     preload : function() {
         game.load.image('player', 'images/mouse.png');
-        game.load.image('bg', 'images/bkg.png');
-        game.load.image('floor', 'images/floor.png');
+        game.load.image('bg', 'images/bkg2.png');
+        game.load.image('floor', 'images/floor2.png');
 		game.load.image('cheese', 'images/sexy-cheese2.png');
-		game.load.image('ground', 'images/platform.png');
+		game.load.image('ground', 'images/bricks.png');
     },
     
 	
@@ -40,13 +40,26 @@ var mainState = {
     platforms.enableBody = true;
 		
 		//  Now let's create two ledges
-    var ledge = platforms.create(400, 400, 'ground');
+    var ledge = platforms.create(300, 600, 'ground');
 
     ledge.body.immovable = true;
 
-    ledge = platforms.create(-150, 250, 'ground');
+    ledge = platforms.create(-150, 270, 'ground');
 
     ledge.body.immovable = true;
+
+	ledge = platforms.create(1300, 350, 'ground');
+
+    ledge.body.immovable = true;
+
+	ledge = platforms.create(400, 180, 'ground');
+
+    ledge.body.immovable = true;
+		
+	ledge = platforms.create(800, 290, 'ground');
+
+    ledge.body.immovable = true;
+                
                 
         //player
         this.player = game.add.sprite(100, 300 ,'player');
@@ -79,7 +92,7 @@ var mainState = {
 			cheese.body.bounce.y = 0.3 + Math.random() * 0.2;
 		}
     // World Bounds
-    game.world.setBounds(0, 0, 800, 600);
+    game.world.setBounds(0, 0, 2400, 600);
     
 		
     //  The score
@@ -125,7 +138,7 @@ var mainState = {
 
         } 
         if (cursors.up.isDown && this.player.body.touching.down){
-            this.player.body.velocity.y = -450;
+            this.player.body.velocity.y = -550;
         
         }
 		
