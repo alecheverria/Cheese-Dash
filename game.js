@@ -3,6 +3,7 @@ var cursors;
 var cheeses;
 var score = 0;
 var scoreText;
+var enemy;
 
 var mainMenu = {
     preload : function() {},
@@ -14,10 +15,11 @@ var mainState = {
     //loads all the assets
     preload : function() {
         game.load.image('player', 'images/mouse.png');
-        game.load.image('bg', 'images/bkg.png');
-        game.load.image('floor', 'images/floor.png');
+        game.load.image('bg', 'images/bkg2.png');
+        game.load.image('floor', 'images/floor2.png');
 		game.load.image('cheese', 'images/sexy-cheese2.png');
-		game.load.image('ground', 'images/platform.png');
+		game.load.image('ground', 'images/bricks.png');
+		game.load.spritesheet('cats', 'images/cats2.png', 440, 345);
     },
     
 	
@@ -40,53 +42,90 @@ var mainState = {
     platforms.enableBody = true;
 		
 		//  Now let's create two ledges
-    var ledge = platforms.create(400, 400, 'ground');
+    var ledge = platforms.create(300, 600, 'ground');
 
     ledge.body.immovable = true;
 
-    ledge = platforms.create(-150, 250, 'ground');
+    ledge = platforms.create(-150, 270, 'ground');
+
+    ledge.body.immovable = true;
+
+	ledge = platforms.create(1300, 350, 'ground');
+
+    ledge.body.immovable = true;
+
+	ledge = platforms.create(400, 180, 'ground');
+
+    ledge.body.immovable = true;
+		
+	ledge = platforms.create(800, 290, 'ground');
 
     ledge.body.immovable = true;
                 
-        //player
-        this.player = game.add.sprite(100, 300 ,'player');
-        this.player.scale.setTo(0.3,0.3);
-        game.physics.arcade.enable(this.player);
-        this.player.body.gravity.y = 600;
-        this.player.body.collideWorldBounds = true;
-        
-        //controls
-        cursors = game.input.keyboard.createCursorKeys();
-        this.consecutiveJumps = 2;
-        
-		// cheeses
-		//  Finally some cheeses to collect
-		cheeses = game.add.group();
+                
+    //player
+	this.player = game.add.sprite(100, 300 ,'player');
+	this.player.scale.setTo(0.3,0.3);
+	game.physics.arcade.enable(this.player);
+	this.player.body.gravity.y = 600;
+	this.player.body.collideWorldBounds = true;
 
-		//  We will enable physics for any cheese that is created in this group
-		cheeses.enableBody = true;
+   
+    // The enemy and its settings
+    this.enemy = game.add.sprite(900, game.world.height - 150, 'cats');
 
-		//  Here we'll create 12 of them evenly spaced apart
-		for (var i = 0; i < 5; i++)
-		{
-			//  Create a cheese inside of the 'cheeses' group
-			var cheese = cheeses.create(Math.floor((Math.random() * 800) + 1), 0, 'cheese');
+    //  We need to enable physics on the enemy
+    game.physics.arcade.enable(this.enemy);
 
-			//  Let gravity do its thing
-			cheese.body.gravity.y = 300;
+    //  Enemy physics properties. Give the little guy a slight bounce.
+    this.enemy.body.bounce.y = 0.2;
+    this.enemy.body.gravity.y = 300;
+    this.enemy.body.collideWorldBounds = true;
 
-			//  This just gives each cheese a slightly random bounce value
-			cheese.body.bounce.y = 0.3 + Math.random() * 0.2;
-		}
+    //  Our two animations, walking left and right.
+    this.enemy.animations.add('left', [0, 1], 4, true);
+    this.enemy.animations.add('right', [3, 4], 4, true);
+		
+	// Animations for Enemy
+	// Cat Animations
+	this.enemy.animations.add('walk');
+	this.enemy.animations.play('walk', 4, true);
+    game.add.tween(this.enemy).to({ x:356}, 10000, Phaser.Easing.Linear.None, true);
+
+	//controls
+	cursors = game.input.keyboard.createCursorKeys();
+	this.consecutiveJumps = 2;
+
+	// cheeses
+	//  Finally some cheeses to collect
+	cheeses = game.add.group();
+
+	//  We will enable physics for any cheese that is created in this group
+	cheeses.enableBody = true;
+
+	//  Here we'll create 12 of them evenly spaced apart
+	for (var i = 0; i < 5; i++)
+	{
+	//  Create a cheese inside of the 'cheeses' group
+	var cheese = cheeses.create(Math.floor((Math.random() * 2000) + 1), 0, 'cheese');
+
+	//  Let gravity do its thing
+	cheese.body.gravity.y = 300;
+
+	//  This just gives each cheese a slightly random bounce value
+	cheese.body.bounce.y = 0.3 + Math.random() * 0.2;
+	}
     // World Bounds
-    game.world.setBounds(0, 0, 800, 600);
+    game.world.setBounds(0, 0, 2400, 600);
     
 		
     //  The score
     scoreText = game.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
+	
     
 		// Game Camera
-	    game.camera.follow(this.player);	
+	    game.camera.follow(this.player);
+		
     },
     update: function() {
         
@@ -125,12 +164,26 @@ var mainState = {
 
         } 
         if (cursors.up.isDown && this.player.body.touching.down){
-            this.player.body.velocity.y = -450;
+            this.player.body.velocity.y = -550;
         
         }
 		
-        
-  
+		// Animation for Enemy
+		this.enemy.x -= .50;
+
+//		if (this.enemy.x < -this.enemy.width)
+//		{
+//		this.enemy.x = game.world.width;
+//		}
+		
+		if (this.enemy.position.x <= 356) {
+		game.add.tween(this.enemy).to({ x:1118}, 10000, Phaser.Easing.Linear.None, true);		
+		}
+		// use left
+		if (this.enemy.position.x >= 1118) {
+		game.add.tween(this.enemy).to({ x:356}, 10000, Phaser.Easing.Linear.None, true);
+		}
+		// use right
    },
 	render: function () {
 
