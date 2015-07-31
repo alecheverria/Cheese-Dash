@@ -19,7 +19,7 @@ var mainState = {
         game.load.image('floor', 'images/floor2.png');
 		game.load.image('cheese', 'images/sexy-cheese2.png');
 		game.load.image('ground', 'images/bricks.png');
-		game.load.spritesheet('cats', 'images/cats2.png', 440, 345);
+		game.load.spritesheet('cats', 'images/cats2.png', 440, 263);
 		game.load.image('win', 'images/winc.png');
 		game.load.image('lose', 'images/game-over.png');
 
